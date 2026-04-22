@@ -1,0 +1,94 @@
+services:
+  # Database
+  db:
+    image: timescale/timescaledb:latest-pg15
+    container_name: nexus-db
+    environment:
+      - POSTGRES_USER=${DB_USER:-monitor}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme}
+      - POSTGRES_DB=${DB_NAME:-nexus_watch}
+    ports:
+      - "5432:5432"
+    volumes:
+      - nexus-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-monitor} -d ${DB_NAME:-nexus_watch}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # CCTV & Main Backend (Nexus Watch)
+  server:
+    build:
+      context: ./nexus-watchs
+      dockerfile: Dockerfile
+    container_name: nexus-server
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgres://${DB_USER:-monitor}:${DB_PASSWORD:-changeme}@db:5432/${DB_NAME:-nexus_watch}
+      - NODE_ENV=production
+      - INGEST_API_URL=http://nexus-ingest:3000
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Monitoring Ingest API
+  ingest-api:
+    build:
+      context: ./monitoring-system/ingest-api
+    container_name: nexus-ingest
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgres://${DB_USER:-monitor}:${DB_PASSWORD:-changeme}@db:5432/${DB_NAME:-nexus_watch}
+      - WEBSOCKET_URL=http://websocket:3001
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Monitoring WebSocket Server
+  websocket:
+    build:
+      context: ./monitoring-system/websocket-server
+    container_name: nexus-websocket
+    env_file: .env
+    environment:
+      - PORT=3001
+    ports:
+      - "3001:3001"
+
+  # Monitoring Processor (Python)
+  processor:
+    build:
+      context: ./monitoring-system/processor
+    container_name: nexus-processor
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgres://${DB_USER:-monitor}:${DB_PASSWORD:-changeme}@db:5432/${DB_NAME:-nexus_watch}
+      - EVAL_INTERVAL=1
+      - OFFLINE_TIMEOUT=30
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Frontend (Nexus Watch)
+  frontend:
+    build:
+      context: ./nexus-watchs/client
+      dockerfile: Dockerfile
+    container_name: nexus-frontend
+    env_file: .env
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=http://localhost:5000
+      - VITE_WS_URL=http://localhost:3001
+    depends_on:
+      - server
+
+volumes:
+  nexus-db-data:

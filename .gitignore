@@ -1,0 +1,81 @@
+# Dependencies
+**/node_modules
+.pnpm-store/
+**/venv
+**/__pycache__
+**/*.egg-info
+
+# Build outputs
+**/dist
+**/build
+**/*.dist
+**/*.tgz
+**/*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.example
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.eslintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+**/logs
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+*.bak
+
+# Coverage
+**/coverage/
+*.lcov
+.nyc_output
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.parcel-cache
+.next
+.nuxt
+.out
+.storybook-out
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Backend/Go specific
+go.sum
+go.mod.bak
+*.key
+*.pem
