@@ -1,0 +1,5 @@
+packages:
+  - 'nexus-watchs'
+  - 'monitoring-system/ingest-api'
+  - 'monitoring-system/websocket-server'
+  - 'nexus-watchs/client'

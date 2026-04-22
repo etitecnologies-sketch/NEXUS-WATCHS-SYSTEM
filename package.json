@@ -2,13 +2,12 @@
   "name": "nexus-watchs-unified",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "nexus-watchs",
-    "monitoring-system/ingest-api",
-    "monitoring-system/websocket-server"
-  ],
   "scripts": {
-    "start": "npm start --prefix nexus-watchs",
-    "build": "npm run build --prefix nexus-watchs"
+    "start": "pnpm --filter nexus-watchs start",
+    "build": "pnpm --filter nexus-watchs build",
+    "postinstall": "pnpm install --recursive"
+  },
+  "devDependencies": {
+    "pnpm": "latest"
   }
 }

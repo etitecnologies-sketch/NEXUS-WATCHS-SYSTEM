@@ -5,48 +5,55 @@
       "source": {
         "directory": "nexus-watchs"
       },
-      "env": {
-        "DATABASE_URL": "${{db.DATABASE_URL}}",
-        "NODE_ENV": "production",
-        "INGEST_API_URL": "http://${{ingest-api.RAILWAY_TCP_PROXY_DOMAIN}}:${{ingest-api.PORT}}"
+      "build": {
+        "builder": "nixpacks"
+      },
+      "deploy": {
+        "startCommand": "pnpm start"
       }
     },
     "ingest-api": {
       "source": {
         "directory": "monitoring-system/ingest-api"
       },
-      "env": {
-        "DATABASE_URL": "${{db.DATABASE_URL}}",
-        "WEBSOCKET_URL": "http://${{websocket.RAILWAY_TCP_PROXY_DOMAIN}}:${{websocket.PORT}}",
-        "PORT": "3000"
+      "build": {
+        "builder": "nixpacks"
+      },
+      "deploy": {
+        "startCommand": "node index.js"
       }
     },
     "websocket": {
       "source": {
         "directory": "monitoring-system/websocket-server"
       },
-      "env": {
-        "PORT": "3001"
+      "build": {
+        "builder": "nixpacks"
+      },
+      "deploy": {
+        "startCommand": "node index.js"
       }
     },
     "processor": {
       "source": {
         "directory": "monitoring-system/processor"
       },
-      "env": {
-        "DATABASE_URL": "${{db.DATABASE_URL}}",
-        "EVAL_INTERVAL": "1",
-        "OFFLINE_TIMEOUT": "30",
-        "PORT": "8080"
+      "build": {
+        "builder": "nixpacks"
+      },
+      "deploy": {
+        "startCommand": "sh start.sh"
       }
     },
     "frontend": {
       "source": {
         "directory": "nexus-watchs/client"
       },
-      "env": {
-        "VITE_API_URL": "https://${{server.RAILWAY_PUBLIC_DOMAIN}}",
-        "VITE_WS_URL": "wss://${{websocket.RAILWAY_PUBLIC_DOMAIN}}"
+      "build": {
+        "builder": "nixpacks"
+      },
+      "deploy": {
+        "startCommand": "pnpm dev"
       }
     }
   }
