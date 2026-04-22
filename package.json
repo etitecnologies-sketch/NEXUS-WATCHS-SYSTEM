@@ -2,12 +2,17 @@
   "name": "nexus-watchs-unified",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.1",
   "scripts": {
     "start": "pnpm --filter nexus-watchs start",
     "build": "pnpm --filter nexus-watchs build",
-    "postinstall": "pnpm install --recursive"
+    "postinstall": "pnpm install --recursive --no-frozen-lockfile"
   },
   "devDependencies": {
-    "pnpm": "latest"
+    "pnpm": "^9.15.1"
   }
 }
