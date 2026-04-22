@@ -1,16 +1,6 @@
 {
-  "$schema": "https://railway.com/railway.schema.json",
+  "version": "2",
   "services": {
-    "db": {
-      "source": {
-        "image": "timescale/timescaledb:latest-pg15"
-      },
-      "env": {
-        "POSTGRES_USER": "monitor",
-        "POSTGRES_PASSWORD": "changeme",
-        "POSTGRES_DB": "nexus_watch"
-      }
-    },
     "server": {
       "source": {
         "directory": "nexus-watchs"
